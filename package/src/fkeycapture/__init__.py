@@ -3,7 +3,6 @@
 import termios, fcntl, sys, os
 from typing import Union, Iterable, Any
 
-global _fd, _flags_save, _attrs_save
 _fd: int = sys.stdin.fileno()
 _flags_save: int = fcntl.fcntl(_fd, fcntl.F_GETFL)
 _attrs_save: list[Any] = termios.tcgetattr(_fd)
@@ -93,7 +92,7 @@ def __handleDelete(base: list[str], current: bytes) -> list[str]:
 
 def get(
     keycount: int = 1,
-    bytes: bool = False,
+    returnBytes: bool = False,
     allowDelete: bool = False,
     osReader: bool = False,
 ) -> Union[str, bytes]:
@@ -101,7 +100,7 @@ def get(
 
     # Inputs:
       keycount: int     - Number of keys, defualts to 1
-      bytes: bool       - Wether to return the key(s) as bytes, defaults to False
+      returnBytes: bool       - Wether to return the key(s) as bytes, defaults to False
       allowDelete: bool - Wether to allow deleting chars, defaults to False
       osReader: bool - Wether to use os.read, defaults to False
 
@@ -125,20 +124,19 @@ def get(
         internalcounter = len(keys)
     out = "".join(keys)  # type: str
     __getp2()
-    if bytes:
+    if returnBytes:
         return out.encode()
-    else:
-        return out
+    return out
 
 
 def getnum(
-    keycount: int = 1, ints: bool = False, allowDelete: bool = False
+    keycount: int = 1, returnInts: bool = False, allowDelete: bool = False
 ) -> Union[str, int]:
     """# Function: getnum
 
     # Inputs:
       keycount: int     - Number of keys, defualts to 1
-      ints: bool        - Wether to return the keys as ints, defaults to False
+      returnInts: bool        - Wether to return the keys as ints, defaults to False
       allowDelete: bool - Wether to allow deleting chars, defaults to False
 
     # Returns:
@@ -157,16 +155,15 @@ def getnum(
                 keys.append(key)
             internalcounter = len(keys)
     out = "".join(keys)
-    if not ints:
-        return out
-    else:
+    if returnInts:
         return int(out)
+    return out
 
 
 def getchars(
     keycount: int = 1,
     chars: Iterable[str] = ["1", "2"],
-    bytes: bool = False,
+    returnBytes: bool = False,
     allowDelete: bool = False,
 ) -> Union[str, bytes]:
     """# Function: getchars
@@ -174,7 +171,7 @@ def getchars(
     # Inputs:
       keycount: int        - Number of keys, defualts to 1
       chars: Iterable[str] - Iterable of allowed keys, defaults to ["1", "2"]
-      bytes: bool          - Wether or not to return the key(s) as bytes, defaults to False
+      returnBytes: bool          - Wether or not to return the key(s) as bytes, defaults to False
       allowDelete: bool    - Wether to allow deleting chars, defaults to False
 
     # Returns:
@@ -182,6 +179,7 @@ def getchars(
 
     # Raises:
       None"""
+    # pylint: disable=dangerous-default-value
     internalcounter = 0
     keys: list[str] = []
     while internalcounter != keycount:
@@ -193,7 +191,6 @@ def getchars(
                 keys.append(key)
             internalcounter = len(keys)
     out = "".join(keys)
-    if not bytes:
+    if not returnBytes:
         return out
-    else:
-        return out.encode()
+    return out.encode()

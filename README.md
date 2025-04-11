@@ -6,10 +6,12 @@ This is a simple and easy to use package that allows you to capture individual k
 3. Recive key as ints  (getnum only)
 #### How to Use:
 1. from fkeycapture import get, getnum, getchars
-2. Use get like this: `get(keycount = any int, bytes = True or False)`
+2. Use get like this: `get(keycount = any int, returnBytes = True or False)`
 3. Use getnum like this: `getnum(keycount = any int, ints = True or False)`
-4. Use getchars like this: `getchars(keycount = any int, chars = list of chars, bytes = True or False)`
+4. Use getchars like this: `getchars(keycount = any int, chars = list of chars, returnBytes = True or False)`
 #### Change log:
+###### v.1.3.0:
+BREAKING CHANGE: In order to comply with pylint, the methods that previously took a `bytes` argument now take a `returnBytes` argument instead.
 ###### v.1.2.7:
 Make some small type hinting changes, update `.pyi` file
 ###### v.1.2.6:
